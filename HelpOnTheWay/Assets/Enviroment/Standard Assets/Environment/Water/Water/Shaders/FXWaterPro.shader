@@ -88,7 +88,7 @@ v2f vert(appdata v)
 	#if defined(HAS_REFLECTION) || defined(HAS_REFRACTION)
 	o.ref = ComputeNonStereoScreenPos(o.pos);
 	#endif
-
+	
 	UNITY_TRANSFER_FOG(o,o.pos);
 	return o;
 }
