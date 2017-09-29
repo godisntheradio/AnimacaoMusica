@@ -8,7 +8,7 @@ namespace Assets.Scripts
     class WaveAnalyser
     {
         AudioSource Source;
-
+        public int sampleResolution = 512;
 
         public void Initialize(AudioSource src)
         {
@@ -19,12 +19,12 @@ namespace Assets.Scripts
         {
             if (Source.isPlaying)
             {
-                float[] spectrum = new float[512];
+                float[] spectrum = new float[sampleResolution];
                 Source.GetSpectrumData(spectrum, 0, FFTWindow.Hamming);
 
-                //float interval = Source.clip;
+                float interval = (AudioSettings.outputSampleRate/2) / sampleResolution;
 
-                return spectrum[(int)(freq * P)];
+                return spectrum[(int)(freq / interval )];
                
             }
             else

@@ -15,6 +15,8 @@ public class WaveEmitter : MonoBehaviour
 
     WaveAnalyser Analyser;
 
+    public GameObject b;
+    public float smooth = 10;
     private void Awake()
     {
         clip.LoadAudioData();
@@ -28,17 +30,22 @@ public class WaveEmitter : MonoBehaviour
         Analyser.Initialize(source);
         source.Play();
 	}
-    float previousMedian = 0;
 	void Update ()
     {
         float a = Analyser.GetFrequency(440.0f);
         {
             Append(a.ToString());
+            if (b)
+            {
+                b.transform.localScale = Vector3.Lerp(new Vector3(0.5f,1 * (a * 100),0.5f), b.transform.localScale, Time.deltaTime * smooth);
+
+            }
+
         }
 	}
     void Append(string toAppend)
     {
-        textRef.text += toAppend + " \n";
+        textRef.text = toAppend + " \n";
     }
    public void ChangeCoiso()
     {
