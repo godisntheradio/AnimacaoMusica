@@ -8,7 +8,9 @@ namespace Assets.Scripts
     class WaveAnalyser
     {
         AudioSource Source;
-        public int sampleResolution = 512;
+        public int sampleResolution = 1024;
+        [SerializeField]
+        FFTWindow window = FFTWindow.Rectangular;
 
         public void Initialize(AudioSource src)
         {
@@ -20,7 +22,7 @@ namespace Assets.Scripts
             if (Source.isPlaying)
             {
                 float[] spectrum = new float[sampleResolution];
-                Source.GetSpectrumData(spectrum, 0, FFTWindow.Hamming);
+                Source.GetSpectrumData(spectrum, 0, window);
 
                 float interval = (AudioSettings.outputSampleRate/2) / sampleResolution;
 
@@ -31,6 +33,15 @@ namespace Assets.Scripts
             {
                 Debug.Log("not playing");
                 return 0;
+            }
+        }
+        void Analyse()
+        {
+            for (int i = 0; i < Source.clip.samples; i++)
+            {
+                float[] samples = new float[sampleResolution];
+                Source.clip.GetData(samples, i);
+                //fazer algo com isso
             }
         }
     }

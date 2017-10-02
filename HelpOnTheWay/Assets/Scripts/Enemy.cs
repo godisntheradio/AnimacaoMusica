@@ -8,26 +8,20 @@ public enum EnemyState
     BIRTH, BEHAVIOUR, DEATH
 }
 
-public class Enemy : MonoBehaviour , IDamageable, IEnemy
+
+
+public class Enemy : Ship , IDamageable, IEnemy
 {
-    float HP;
-    float RateOfFire;
-    GameObject bullet;
 
     EnemyState State;
-
-    List<GameObject> bulletpool;
-
-
 	void Start ()
     {
-		
+        base.Start();
 	}
-	void Initialize(float hp, GameObject typeOfBullet, float rof)
+    public virtual void Initialize(ShipSettings shipSettings)
     {
-        HP = hp;
-        bullet = typeOfBullet;
-        RateOfFire = rof;
+        base.Initialize(shipSettings);
+        State = EnemyState.BIRTH;
     }
     void Update ()
     {
@@ -47,54 +41,34 @@ public class Enemy : MonoBehaviour , IDamageable, IEnemy
         }
     }
     
-    void Shoot()
-    {
-
-    }
-    GameObject GetGameObjectFromPool()
-    {
-        if (bulletpool.Count < 20)
-        {
-            GameObject obj = Instantiate(bullet, transform.position, transform.rotation);
-            bulletpool.Add(obj);
-            return obj;
-        }
-        else
-        {
-            foreach (GameObject item in bulletpool)
-            {
-                if (!item.activeSelf)
-                {
-                    item.transform.position = transform.position;
-                    item.transform.rotation = transform.rotation;
-                    item.SetActive(true);
-                    return item;
-                }
-            }
-            return null;
-        }
-    }
+    
     public void TakeDamage(float damage)
     {
-        HP += damage;
-        if (HP <= 0)
+        Settings.HitPoints += damage;
+        if (Settings.HitPoints <= 0)
         {
             State = EnemyState.DEATH;
         }
     }
 
-    public void Birth()
+    public virtual void Birth()
     {
-        throw new NotImplementedException();
+        AudioSystem.PlayTestSound();
+        State = EnemyState.BEHAVIOUR;
+    }
+    float Clock = 0;
+    public virtual void Behaviour()
+    {
+        Clock += Time.deltaTime;
+        if (Clock > 10)
+        {
+            State = EnemyState.DEATH;
+            Clock = 0;
+        }
     }
 
-    public void Behaviour()
+    public virtual void Death()
     {
-        throw new NotImplementedException();
-    }
-
-    public void Death()
-    {
-        throw new NotImplementedException();
+        gameObject.SetActive(false);
     }
 }
