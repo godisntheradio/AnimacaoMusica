@@ -80,4 +80,6 @@ public class EnemyEmitter : MonoBehaviour
             Debug.Log("nao rolô spawna o bixo");
         }
     }
+
+
 }

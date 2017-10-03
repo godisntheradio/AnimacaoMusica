@@ -56,14 +56,14 @@ public class Enemy : Ship , IDamageable, IEnemy
         AudioSystem.PlayTestSound();
         State = EnemyState.BEHAVIOUR;
     }
-    float Clock = 0;
+    float TestClock = 0;
     public virtual void Behaviour()
     {
-        Clock += Time.deltaTime;
-        if (Clock > 10)
+        TestClock += Time.deltaTime;
+        if (TestClock > 10)
         {
             State = EnemyState.DEATH;
-            Clock = 0;
+            TestClock = 0;
         }
     }
 

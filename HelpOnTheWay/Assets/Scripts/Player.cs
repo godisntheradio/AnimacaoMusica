@@ -29,7 +29,14 @@ public class Player : Ship, IDamageable
 	}
 	void Update ()
     {
-		
+        if (Input.GetKey(KeyCode.Space))
+        {
+            Shoot();
+        }
+        if (true)
+        {
+
+        }
 	}
 	void Spawn()
     {

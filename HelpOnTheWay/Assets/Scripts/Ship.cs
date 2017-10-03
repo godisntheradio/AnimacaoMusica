@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[System.Serializable]
 public struct ShipSettings
 {
     public float HitPoints;
@@ -53,7 +53,8 @@ public class ObjectPool
                     return item;
                 }
             }
-            return null;
+            LimitToPool++;
+            return GetGameObjectFromPool();
         }
     }
 }
@@ -87,25 +88,50 @@ public class Ship : MonoBehaviour
         Settings = shipSettings;
         if (Pool == null)
         {
-            Pool = new ObjectPool(shipSettings.Bullet, this.transform, 20);
+            Pool = new ObjectPool(shipSettings.Bullet, this.transform, 2);
         }
     }
+    float FireClock = 0;
+    bool CanFire = true; 
     public void Shoot()
     {
-        GameObject newBullet = Pool.GetGameObjectFromPool();
-        if (newBullet.GetComponent<Bullet>())
+        if (CanFire)
         {
-            newBullet.GetComponent<Bullet>().Initialize(Settings.BulletParameters);
+            GameObject newBullet = Pool.GetGameObjectFromPool();
+             AudioSystem.PlayTestSound();
+            if (newBullet)
+            {
+                if (newBullet.GetComponent<Bullet>())
+                {
+                    newBullet.GetComponent<Bullet>().Initialize(Settings.BulletParameters);
+                }
+                else
+                {
+                    Bullet component = newBullet.AddComponent<Bullet>();
+                    component.Initialize(Settings.BulletParameters);
+                }
+                FireClock = 0;
+            }
+            else
+            {
+                Debug.Log("erro ao atirar");
+            }
+            CanFire = false;
+
         }
         else
         {
-            Bullet component = newBullet.AddComponent<Bullet>();
-            component.Initialize(Settings.BulletParameters);
+            FireClock += Time.deltaTime;
+            if (FireClock >= Settings.RateOfFire)
+            {
+                CanFire = true;
+                FireClock = 0;
+            }
         }
     }
-    public void Move()
+    public void Move(Vector3 movement)
     {
-
+        
     }
 
 }

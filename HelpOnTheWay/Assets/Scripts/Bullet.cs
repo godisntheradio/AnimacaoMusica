@@ -6,7 +6,7 @@ public enum BulletType
 {
     LINEAR, CIRCULAR, ESPIRAL, CURVE
 }
-
+[System.Serializable]
 public struct BulletSettings
 {
     //type of movement
@@ -19,11 +19,13 @@ public struct BulletSettings
 public class Bullet : MonoBehaviour
 {
     BulletSettings Settings;
-
+    float LifeSpan = 10;
+    float LifeSpanClock = 0;
     public void Initialize(BulletSettings settings)
     {
         Settings = new BulletSettings();
         Settings = settings;
+        LifeSpanClock = 0;
     }
 	void Start ()
     {
@@ -32,7 +34,15 @@ public class Bullet : MonoBehaviour
 	
 	void Update ()
     {
-		
+        LifeSpanClock += Time.deltaTime;
+        if (LifeSpanClock < LifeSpan)
+        {
+            Behaviour();
+        }
+        else
+        {
+            KillBullet();
+        }
 	}
     private void OnCollisionEnter(Collision collision)
     {
@@ -56,5 +66,12 @@ public class Bullet : MonoBehaviour
         //animation
         gameObject.SetActive(false);
     }
-
+    public void Move(Vector3 movement)
+    {
+        transform.position += transform.forward * Settings.Speed;
+    }
+    public virtual void Behaviour()
+    {
+        Move(new Vector3());
+    }
 }
