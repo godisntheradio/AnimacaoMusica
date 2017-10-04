@@ -88,7 +88,7 @@ public class Ship : MonoBehaviour
         Settings = shipSettings;
         if (Pool == null)
         {
-            Pool = new ObjectPool(shipSettings.Bullet, this.transform, 2);
+            Pool = new ObjectPool(shipSettings.Bullet, transform, 20);
         }
     }
     float FireClock = 0;
@@ -98,7 +98,7 @@ public class Ship : MonoBehaviour
         if (CanFire)
         {
             GameObject newBullet = Pool.GetGameObjectFromPool();
-             AudioSystem.PlayTestSound();
+            AudioSystem.PlayTestSound();
             if (newBullet)
             {
                 if (newBullet.GetComponent<Bullet>())
@@ -110,6 +110,8 @@ public class Ship : MonoBehaviour
                     Bullet component = newBullet.AddComponent<Bullet>();
                     component.Initialize(Settings.BulletParameters);
                 }
+                newBullet.GetComponent<Bullet>().Move(transform.position);
+                AudioSystem.PlayShootSound();
                 FireClock = 0;
             }
             else
@@ -131,7 +133,20 @@ public class Ship : MonoBehaviour
     }
     public void Move(Vector3 movement)
     {
-        
+        movement += Vector3.Scale(transform.position, new Vector3(1,0,1));
+        //movement *= Time.deltaTime;
+        if (GetComponent<Rigidbody>())
+        {
+            GetComponent<Rigidbody>().MovePosition(movement);
+        }
+        else if (GetComponentInChildren<Rigidbody>())
+        {
+            GetComponentInChildren<Rigidbody>().MovePosition(movement);
+        }
+        else
+        {
+            transform.position = movement;
+        }
     }
 
 }

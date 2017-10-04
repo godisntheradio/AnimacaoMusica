@@ -7,11 +7,17 @@ public class ShipAudio : MonoBehaviour
     AudioSource ShipSource;
     [SerializeField]
     AudioClip Teste;
+    [SerializeField]
+    AudioClip Death;
+    [SerializeField]
+    AudioClip Shot;
 
+    bool hasDeathSound = false;
     void Start()
     {
         ShipSource = gameObject.AddComponent<AudioSource>();
-
+        Death.LoadAudioData();
+        Shot.LoadAudioData();
     }
     void Update()
     {
@@ -24,7 +30,26 @@ public class ShipAudio : MonoBehaviour
         ShipSource.loop = false;
         ShipSource.Play();
     }
-
+    public void PlayShootSound()
+    {
+        ShipSource.clip = Shot;
+        ShipSource.loop = false;
+        //ShipSource.Play();
+    }
+    public void PlayDeathSound()
+    {
+        if (!hasDeathSound)
+        {
+            ShipSource.clip = Death;
+            ShipSource.loop = false;
+            ShipSource.Play();
+            hasDeathSound = true;
+        }
+    }
+    public bool IsPlayingSound()
+    {
+        return ShipSource.isPlaying;
+    }
 
 
 }

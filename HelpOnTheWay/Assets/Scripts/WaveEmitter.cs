@@ -43,13 +43,27 @@ public class WaveEmitter : MonoBehaviour
 	}
 	void Update ()
     {
-        float freq = 32.41f;
+        float freq = 32.70f;
+        float fundamental = freq;
+        int pitch = 1;
+        List<float> arrayFreq = new List<float>();
         foreach (GameObject item in objs)
         {
             float a = Analyser.GetFrequency(freq);
+            arrayFreq.Add(freq);
             item.transform.localScale = Vector3.Lerp(new Vector3(0.5f,1 * (a * 100),0.5f), item.transform.localScale, Time.deltaTime * smooth);
-            freq += 5;
+            freq = fundamental + ((fundamental / 12) * pitch);
+            if (pitch >= 12)
+            {
+                fundamental *= 2;
+                pitch = 1;
+            }
+            else
+            {
+                pitch++;
+            }
         }
+            arrayFreq.Clear();
 	}
     void Append(string toAppend)
     {

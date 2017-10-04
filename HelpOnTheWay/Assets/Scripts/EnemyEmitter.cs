@@ -56,12 +56,12 @@ public class EnemyEmitter : MonoBehaviour
         GameObject newEnemy = Pool.GetGameObjectFromPool();
         if (newEnemy)
         {
-            newEnemy.transform.position = GetARandomTreePos();
             Enemy enemy = newEnemy.GetComponent<Enemy>();
             if (!enemy)
             {
                 enemy = newEnemy.AddComponent<Enemy>();
             }
+            enemy.Move(GetARandomTreePos());
             ShipSettings setts = new ShipSettings();
             BulletSettings bSetts = new BulletSettings();
             bSetts.Damage = 10;

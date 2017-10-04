@@ -14,7 +14,7 @@ public class Player : Ship, IDamageable
     {
         if (!godMode)
         {
-            Settings.HitPoints += damage;
+            Settings.HitPoints -= damage;
             if (Settings.HitPoints <= 0)
             {
                 State = PlayerState.DEAD;
@@ -27,17 +27,47 @@ public class Player : Ship, IDamageable
         base.Start();
 
 	}
+    float x = 0;
 	void Update ()
     {
+
+        Vector3 movement = new Vector3();
         if (Input.GetKey(KeyCode.Space))
         {
             Shoot();
         }
-        if (true)
+        if (Input.GetKey(KeyCode.RightArrow))
         {
-
+            movement += Vector3.right;
         }
-	}
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            movement += Vector3.left;
+        }
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            movement += Vector3.forward;
+        }
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            movement += Vector3.back;
+        }
+        if (movement != Vector3.zero)
+        {
+            if (x < 1)
+            {
+                x += Time.deltaTime *2;
+            }
+            Move(movement * Settings.MovementSpeed * Mathf.Pow(x, 2));
+        }
+        else
+        {
+            if (x > 0)
+            {
+                x -= Time.deltaTime * 2;
+            }
+        }
+    }
 	void Spawn()
     {
 

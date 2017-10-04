@@ -44,7 +44,7 @@ public class Enemy : Ship , IDamageable, IEnemy
     
     public void TakeDamage(float damage)
     {
-        Settings.HitPoints += damage;
+        Settings.HitPoints -= damage;
         if (Settings.HitPoints <= 0)
         {
             State = EnemyState.DEATH;
@@ -60,7 +60,7 @@ public class Enemy : Ship , IDamageable, IEnemy
     public virtual void Behaviour()
     {
         TestClock += Time.deltaTime;
-        if (TestClock > 10)
+        if (TestClock > 20)
         {
             State = EnemyState.DEATH;
             TestClock = 0;
@@ -69,6 +69,10 @@ public class Enemy : Ship , IDamageable, IEnemy
 
     public virtual void Death()
     {
-        gameObject.SetActive(false);
+        AudioSystem.PlayDeathSound();
+        if (!AudioSystem.IsPlayingSound())
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

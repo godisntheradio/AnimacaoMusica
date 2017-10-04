@@ -19,15 +19,22 @@ public struct BulletSettings
 public class Bullet : MonoBehaviour
 {
     BulletSettings Settings;
-    float LifeSpan = 10;
+    float LifeSpan = 6;
     float LifeSpanClock = 0;
     public void Initialize(BulletSettings settings)
     {
         Settings = new BulletSettings();
         Settings = settings;
         LifeSpanClock = 0;
+        if (GetComponent<Rigidbody>())
+        {
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        }
+
+
     }
-	void Start ()
+    void Start ()
     {
 		
 	}
@@ -47,18 +54,13 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //call take damage from Enemy
-        IDamageable damageable = null;
-        if (collision.gameObject.GetComponent<Enemy>())
-        {
-            damageable = (IDamageable)collision.gameObject.GetComponent<Enemy>();
-        }
-        else if (collision.gameObject.GetComponent<Player>())
-        {
-            damageable = (IDamageable)collision.gameObject.GetComponent<Player>();
-        }
+        Debug.Log("colidiu");
+        IDamageable damageable = SearchComponent<Enemy>(collision.transform);
+        //search through child
         if (damageable != null)
         {
             damageable.TakeDamage(Settings.Damage);
+            Debug.Log("acertou");
         }
     }
     private void KillBullet()
@@ -68,10 +70,54 @@ public class Bullet : MonoBehaviour
     }
     public void Move(Vector3 movement)
     {
-        transform.position += transform.forward * Settings.Speed;
+        //movement *= Time.deltaTime;
+        if (GetComponent<Rigidbody>())
+        {
+            GetComponent<Rigidbody>().MovePosition(transform.position + (Vector3.forward * Settings.Speed));
+        }
+        else
+        {
+            transform.position  +=  (Vector3.forward * Settings.Speed);
+        }
     }
     public virtual void Behaviour()
     {
         Move(new Vector3());
     }
+    public T SearchComponent<T>(Transform transform)
+    {
+        //Search Up
+        if (transform)
+        {
+            T comp = transform.GetComponent<T>();
+            if (comp != null)
+            {
+                return comp;
+            }
+            else
+            {
+                comp = SearchComponent<T>(transform.parent);
+                if (comp != null)
+                {
+                    return comp;
+                }
+            }
+
+            //search Down
+            //for (int i = 0; i < transform.childCount; i++)
+            //{
+            //    T comp = transform.GetChild(i).GetComponent<T>();
+            //    if (comp != null)
+            //    {
+            //        return comp;
+            //    }
+            //    if (transform.GetChild(i).childCount > 0)
+            //    {
+            //        SearchComponent<T>(transform.GetChild(i));
+            //    }
+            //}
+        }
+        return default(T);
+    }
+
 }

@@ -8,7 +8,7 @@ namespace Assets.Scripts
     class WaveAnalyser
     {
         AudioSource Source;
-        public int sampleResolution = 1024;
+        public int sampleResolution = 2048;
         [SerializeField]
         FFTWindow window = FFTWindow.Rectangular;
 
