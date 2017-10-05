@@ -5,14 +5,19 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
+    GameObject StartPoint;
+    [SerializeField]
+    GameObject PlayerPrefab;
+    [SerializeField]
     Player playerRef;
     [SerializeField]
     ShipSettings settings;
     [SerializeField]
     EnemyEmitter emiterRef;
-
+    
 	void Start ()
     {
+        emiterRef.SetEmiterSource(GetComponent<WaveEmitter>().GetAudioSource());
 		
 	}
 	
@@ -23,7 +28,11 @@ public class GameManager : MonoBehaviour
 
     public void BeginGame()
     {
-
+        if (!playerRef)
+        {
+            playerRef = Instantiate(PlayerPrefab, StartPoint.transform.position, StartPoint.transform.rotation).GetComponent<Player>();
+        }
         playerRef.Initialize(settings);
+
     }
 }

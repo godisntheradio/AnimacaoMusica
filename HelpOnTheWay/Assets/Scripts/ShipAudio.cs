@@ -11,13 +11,38 @@ public class ShipAudio : MonoBehaviour
     AudioClip Death;
     [SerializeField]
     AudioClip Shot;
+    [SerializeField]
+    AudioClip GetShot;
+    AudioSource DeathSource;
+    [SerializeField]
+    UnityEngine.Audio.AudioMixer mixer;
 
-    bool hasDeathSound = false;
+    public bool hasDeathSound = false;
     void Start()
     {
-        ShipSource = gameObject.AddComponent<AudioSource>();
+
+        if (!ShipSource)
+        {
+            ShipSource = gameObject.AddComponent<AudioSource>();
+            ShipSource.playOnAwake = false;
+            ShipSource.outputAudioMixerGroup = mixer.outputAudioMixerGroup;
+        }
+        if (!DeathSource)
+        {
+            DeathSource = gameObject.AddComponent<AudioSource>();
+            DeathSource.playOnAwake = false;
+            DeathSource.outputAudioMixerGroup = mixer.outputAudioMixerGroup;
+
+        }
+
         Death.LoadAudioData();
+        DeathSource.clip = Death;
         Shot.LoadAudioData();
+    }
+    public void Initialize()
+    {
+        hasDeathSound = false;
+
     }
     void Update()
     {
@@ -34,15 +59,14 @@ public class ShipAudio : MonoBehaviour
     {
         ShipSource.clip = Shot;
         ShipSource.loop = false;
-        //ShipSource.Play();
+        ShipSource.Play();
     }
     public void PlayDeathSound()
     {
         if (!hasDeathSound)
         {
-            ShipSource.clip = Death;
-            ShipSource.loop = false;
-            ShipSource.Play();
+            DeathSource.loop = false;
+            DeathSource.Play();
             hasDeathSound = true;
         }
     }
@@ -50,6 +74,15 @@ public class ShipAudio : MonoBehaviour
     {
         return ShipSource.isPlaying;
     }
-
+    public bool IsPlayingDeathSound()
+    {
+        return DeathSource.isPlaying;
+    }
+    public void PlayHitSound()
+    {
+        ShipSource.clip = GetShot;
+        ShipSource.loop = false;
+        ShipSource.Play();
+    }
 
 }

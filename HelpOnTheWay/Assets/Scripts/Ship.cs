@@ -57,6 +57,18 @@ public class ObjectPool
             return GetGameObjectFromPool();
         }
     }
+    public int GetActiveCount()
+    {
+        int active = 0;
+        foreach (GameObject item in Pool)
+        {
+            if (item.activeSelf)
+            {
+                active++;
+            }
+        }
+        return active;
+    }
 }
 
 public class Ship : MonoBehaviour
@@ -66,7 +78,10 @@ public class Ship : MonoBehaviour
     public ObjectPool Pool;
 
     public ShipAudio AudioSystem;
-   
+
+    protected ShipSettings InitialSettings;
+
+
     public virtual void Start ()
     {
         if (GetComponent<ShipAudio>() == null)
@@ -77,6 +92,7 @@ public class Ship : MonoBehaviour
         {
             AudioSystem = GetComponent<ShipAudio>();
         }
+        AudioSystem.Initialize();
 	}
 
     public virtual void Update ()
@@ -86,6 +102,7 @@ public class Ship : MonoBehaviour
     public virtual void Initialize(ShipSettings shipSettings)
     {
         Settings = shipSettings;
+        InitialSettings = shipSettings;
         if (Pool == null)
         {
             Pool = new ObjectPool(shipSettings.Bullet, transform, 20);
@@ -134,13 +151,17 @@ public class Ship : MonoBehaviour
     public void Move(Vector3 movement)
     {
         movement += Vector3.Scale(transform.position, new Vector3(1,0,1));
-        //movement *= Time.deltaTime;
+        
         if (GetComponent<Rigidbody>())
         {
+            GetComponentInChildren<Rigidbody>().angularVelocity = Vector3.zero;
+            GetComponentInChildren<Rigidbody>().drag = 0;
             GetComponent<Rigidbody>().MovePosition(movement);
         }
         else if (GetComponentInChildren<Rigidbody>())
         {
+            GetComponentInChildren<Rigidbody>().angularVelocity = Vector3.zero;
+            GetComponentInChildren<Rigidbody>().drag = 0;
             GetComponentInChildren<Rigidbody>().MovePosition(movement);
         }
         else

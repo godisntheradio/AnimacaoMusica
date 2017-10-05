@@ -5,7 +5,7 @@ using UnityEngine;
 
 public enum EnemyState
 {
-    BIRTH, BEHAVIOUR, DEATH
+    BIRTH, BEHAVIOUR, DEATH, EXPIRE
 }
 
 
@@ -13,17 +13,15 @@ public enum EnemyState
 public class Enemy : Ship , IDamageable, IEnemy
 {
 
-    EnemyState State;
-	void Start ()
-    {
-        base.Start();
-	}
+    protected EnemyState State;
+	
     public virtual void Initialize(ShipSettings shipSettings)
     {
         base.Initialize(shipSettings);
+        
         State = EnemyState.BIRTH;
     }
-    void Update ()
+    public virtual void Update ()
     {
         switch (State)
         {
@@ -36,6 +34,9 @@ public class Enemy : Ship , IDamageable, IEnemy
             case EnemyState.DEATH:
                 Death();
                 break;
+            case EnemyState.EXPIRE:
+                Expire();
+                break;
             default:
                 break;
         }
@@ -45,34 +46,41 @@ public class Enemy : Ship , IDamageable, IEnemy
     public void TakeDamage(float damage)
     {
         Settings.HitPoints -= damage;
+        AudioSystem.PlayHitSound();
+
         if (Settings.HitPoints <= 0)
         {
             State = EnemyState.DEATH;
+
         }
     }
 
     public virtual void Birth()
     {
-        AudioSystem.PlayTestSound();
-        State = EnemyState.BEHAVIOUR;
+        //State = EnemyState.BEHAVIOUR;
     }
-    float TestClock = 0;
+    //float TestClock = 0;
     public virtual void Behaviour()
     {
-        TestClock += Time.deltaTime;
-        if (TestClock > 20)
-        {
-            State = EnemyState.DEATH;
-            TestClock = 0;
-        }
+        //TestClock += Time.deltaTime;
+        //if (TestClock > 20)
+        //{
+        //    State = EnemyState.EXPIRE;
+        //    TestClock = 0;
+        //}
     }
 
     public virtual void Death()
     {
-        AudioSystem.PlayDeathSound();
-        if (!AudioSystem.IsPlayingSound())
-        {
-            gameObject.SetActive(false);
-        }
+        //AudioSystem.PlayDeathSound();
+        //if (AudioSystem.hasDeathSound && !AudioSystem.IsPlayingDeathSound())
+        //{
+        //gameObject.SetActive(false);
+
+        //}
+    }
+    public virtual void Expire()
+    {
+        //gameobject.setactive(false);
     }
 }

@@ -15,6 +15,7 @@ public class Player : Ship, IDamageable
         if (!godMode)
         {
             Settings.HitPoints -= damage;
+            AudioSystem.PlayHitSound();
             if (Settings.HitPoints <= 0)
             {
                 State = PlayerState.DEAD;
@@ -58,7 +59,7 @@ public class Player : Ship, IDamageable
             {
                 x += Time.deltaTime *2;
             }
-            Move(movement * Settings.MovementSpeed * Mathf.Pow(x, 2));
+            Move(movement * Settings.MovementSpeed * Mathf.Pow(x, 2) * Time.deltaTime );
         }
         else
         {
@@ -71,5 +72,9 @@ public class Player : Ship, IDamageable
 	void Spawn()
     {
 
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        
     }
 }

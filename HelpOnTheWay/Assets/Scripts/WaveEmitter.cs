@@ -18,6 +18,8 @@ public class WaveEmitter : MonoBehaviour
     public GameObject b;
     List<GameObject> objs;
     public float smooth = 40;
+    [SerializeField]
+    float SpectrumScale = 100;
     private void Awake()
     {
        
@@ -46,24 +48,17 @@ public class WaveEmitter : MonoBehaviour
         float freq = 32.70f;
         float fundamental = freq;
         int pitch = 1;
-        List<float> arrayFreq = new List<float>();
         foreach (GameObject item in objs)
         {
-            float a = Analyser.GetFrequency(freq);
-            arrayFreq.Add(freq);
-            item.transform.localScale = Vector3.Lerp(new Vector3(0.5f,1 * (a * 100),0.5f), item.transform.localScale, Time.deltaTime * smooth);
-            freq = fundamental + ((fundamental / 12) * pitch);
-            if (pitch >= 12)
-            {
-                fundamental *= 2;
-                pitch = 1;
-            }
-            else
-            {
-                pitch++;
-            }
+            float a = Analyser.GetFrequencyVolume(freq);
+            item.transform.localScale = Vector3.Lerp(new Vector3(0.5f,1 * (a * SpectrumScale),0.5f), item.transform.localScale, Time.deltaTime * smooth);
+            float aconst = Mathf.Pow(2.0f, 1.0f / 12.0f);
+            float aN = (Mathf.Pow(aconst, (float) pitch));
+            freq = fundamental * aN;
+            pitch++;
+            
+            
         }
-            arrayFreq.Clear();
 	}
     void Append(string toAppend)
     {
@@ -100,6 +95,10 @@ public class WaveEmitter : MonoBehaviour
         }
         source.Play();
 
+    }
+    public AudioSource GetAudioSource()
+    {
+        return source;
     }
 
 }

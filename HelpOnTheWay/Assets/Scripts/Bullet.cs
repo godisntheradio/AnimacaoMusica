@@ -54,13 +54,12 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //call take damage from Enemy
-        Debug.Log("colidiu");
         IDamageable damageable = SearchComponent<Enemy>(collision.transform);
         //search through child
         if (damageable != null)
         {
             damageable.TakeDamage(Settings.Damage);
-            Debug.Log("acertou");
+            KillBullet();
         }
     }
     private void KillBullet()
@@ -73,7 +72,7 @@ public class Bullet : MonoBehaviour
         //movement *= Time.deltaTime;
         if (GetComponent<Rigidbody>())
         {
-            GetComponent<Rigidbody>().MovePosition(transform.position + (Vector3.forward * Settings.Speed));
+            GetComponent<Rigidbody>().MovePosition(transform.position + (Vector3.forward * Settings.Speed * Time.deltaTime));
         }
         else
         {
