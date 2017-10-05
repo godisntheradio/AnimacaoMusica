@@ -25,13 +25,14 @@ public class ShipAudio : MonoBehaviour
         {
             ShipSource = gameObject.AddComponent<AudioSource>();
             ShipSource.playOnAwake = false;
-            ShipSource.outputAudioMixerGroup = mixer.outputAudioMixerGroup;
+            ShipSource.outputAudioMixerGroup = mixer.FindMatchingGroups("Master")[0];
         }
         if (!DeathSource)
         {
             DeathSource = gameObject.AddComponent<AudioSource>();
             DeathSource.playOnAwake = false;
-            DeathSource.outputAudioMixerGroup = mixer.outputAudioMixerGroup;
+            DeathSource.outputAudioMixerGroup = mixer.FindMatchingGroups("Master")[0];
+            
 
         }
 
