@@ -59,12 +59,12 @@ public class Agent : MonoBehaviour
         JG.SetTargetState(group);
         ExitTriggerTransition ET = new ExitTriggerTransition();
         ET.SetTargetState(exit);
-        //ExitTriggerTransition ET2 = new ExitTriggerTransition();
-        //ET.SetTargetState(group);
+        ExitFormationTransition EF = new ExitFormationTransition();
+        EF.SetTargetState(group);
 
         initial.AddTransitions(JG);
         group.AddTransitions(ET);
-        //exit.AddTransitions(ET2);
+        exit.AddTransitions(EF);
 
         FSM.AddState(initial);
         FSM.AddState(group);
@@ -101,7 +101,7 @@ public class Agent : MonoBehaviour
         RefRigidbody.AddForce(total);
         if (total != Vector3.zero)
         {
-            RefRigidbody.MoveRotation(Quaternion.LookRotation(total +transform.position));
+            RefRigidbody.MoveRotation( Quaternion.LookRotation(total));
         }
     }
     private void OnTriggerEnter(Collider collision)

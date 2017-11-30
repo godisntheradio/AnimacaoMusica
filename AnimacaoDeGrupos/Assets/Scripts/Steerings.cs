@@ -58,7 +58,7 @@ class Steerings
             if (agent.Parameters.ID != neighbor.Parameters.ID)
             {
                 Vector3 toAgent = agent.transform.position - neighbor.transform.position;
-                force += toAgent.normalized / toAgent.magnitude;
+                force += toAgent.normalized / (toAgent.magnitude / neighbor.Parameters.Radius );
             }
         }
         return force;
@@ -70,14 +70,14 @@ class Steerings
         {
             if (agent.Parameters.ID != neighbor.Parameters.ID)
             {
-                AverageHeading += neighbor.RefRigidbody.velocity.normalized;
+                AverageHeading += neighbor.RefRigidbody.velocity;
             }
         }
         if (agent.GetNeighbors().Count > 0)
         {
             AverageHeading /= agent.GetNeighbors().Count;
 
-            AverageHeading -= agent.RefRigidbody.velocity.normalized;
+            AverageHeading -= agent.RefRigidbody.velocity;
         }
         return AverageHeading;
     }

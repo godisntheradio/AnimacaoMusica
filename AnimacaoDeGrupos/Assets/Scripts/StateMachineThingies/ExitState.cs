@@ -27,6 +27,7 @@ namespace Assets.Scripts.StateMachineThingies
 
         public override void ExitAction()
         {
+
         }
         public override void CollisionReaction(Collider collision)
         {

@@ -23,11 +23,13 @@ namespace Assets.Scripts
         }
         public override void ApplySteerings(Vector3 Target)
         {
-           
-            RefRigidbody.AddForce(Steerings.Arrive(this,Target));
-            if (Target != Vector3.zero)
+            Target = new Vector3(Target.x, transform.position.y, Target.z);
+            Vector3 force = Steerings.Arrive(this, Target);
+            RefRigidbody.AddForce(force);
+            if (( Target - transform.position).magnitude > 3)
             {
-                RefRigidbody.MoveRotation(Quaternion.LookRotation(Target + transform.position));
+                
+                RefRigidbody.MoveRotation(Quaternion.LookRotation(Target - transform.position));
             }
         }
         public void CreateFormation()

@@ -24,7 +24,7 @@ public class Manager : MonoBehaviour
         AgentList = new List<Agent>();
         AddToGroup(Leader);
 	}
-	void Update ()
+	void FixedUpdate ()
     {
         Focus = GetFocus();
 
