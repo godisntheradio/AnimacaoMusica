@@ -77,7 +77,7 @@ class Steerings
         {
             AverageHeading /= agent.GetNeighbors().Count;
 
-            AverageHeading -= agent.RefRigidbody.velocity;
+            //AverageHeading -= agent.RefRigidbody.velocity;
         }
         return AverageHeading;
     }

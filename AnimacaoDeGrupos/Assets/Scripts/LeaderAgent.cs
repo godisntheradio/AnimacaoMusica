@@ -35,8 +35,8 @@ namespace Assets.Scripts
         public void CreateFormation()
         {
             FormationSlots.Clear();
-            float HeightOffset = -2;
-            float WidthOffset = 2;
+            float HeightOffset = -3;
+            float WidthOffset = 3;
             int triangleHeight = 0;
             int slotsInRow = 1;
             int countRowSlot = 0;

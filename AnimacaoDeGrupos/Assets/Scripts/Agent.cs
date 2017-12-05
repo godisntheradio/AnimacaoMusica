@@ -98,7 +98,10 @@ public class Agent : MonoBehaviour
         total += Steerings.Seek(this, Target) * Parameters.SeekLeaderFactor;
         total += Steerings.Flee(this, Target) * Parameters.FleeLeaderFactor;
 
-        RefRigidbody.AddForce(total);
+        if (total != Vector3.zero)
+        {
+            RefRigidbody.AddForce(total);
+        }
         if (total != Vector3.zero)
         {
             RefRigidbody.MoveRotation( Quaternion.LookRotation(total));
