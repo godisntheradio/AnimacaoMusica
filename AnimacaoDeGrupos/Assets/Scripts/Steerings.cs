@@ -58,7 +58,7 @@ class Steerings
             if (agent.Parameters.ID != neighbor.Parameters.ID)
             {
                 Vector3 toAgent = agent.transform.position - neighbor.transform.position;
-                force += toAgent.normalized / (toAgent.magnitude / neighbor.Parameters.Radius );
+                force += toAgent.normalized / (toAgent.magnitude );
             }
         }
         return force;
