@@ -1,4 +1,4 @@
 # AnimacaoMusica
-trabalhoMusica
 
-http://web.mit.edu/manoli/morph/www/morph.html
+Projeto de integração de animação com música para o curso de Jogos Digitais.
+
